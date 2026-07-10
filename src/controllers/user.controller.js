@@ -118,7 +118,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
     const {accessToken, refreshToken} = await generateAccessAndRefreshTokens(user._id)
 
-    const loggedInUser = User.findById(user._id).select("-password", "-refreshToken")
+    const loggedInUser = User.findById(user._id).select("-password -refreshToken")
 
     const options = {
         httpOnly: true,
@@ -143,7 +143,7 @@ const loginUser = asyncHandler(async (req, res) => {
 
 const loggoutUser = asyncHandler(async (req, res) => {
     await User.findByIdAndUpdate(
-        req.User._id,
+        req.user._id,
         {
             $set: {
                 refreshToken: undefined
