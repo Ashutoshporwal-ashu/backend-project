@@ -5,3 +5,5 @@ const asyncHandler = (requestHandler) => {
 }
 
 export {asyncHandler} 
+
+// requestHandler is noting but it is a controller like registerUser, loginUser
