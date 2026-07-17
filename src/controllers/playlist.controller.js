@@ -79,6 +79,37 @@ const getPlaylistById = asyncHandler(async (req, res) => {
 
 const addVideoToPlaylist = asyncHandler(async (req, res) => {
     const {playlistId, videoId} = req.params
+
+    if(!(isValidObjectId(playlistId) || isValidObjectId(videoId))){
+        throw new ApiError(404, "id's is invalid format")
+    }
+
+    const userId = req.user._id
+
+    const updatedPlaylist = await Playlist.findByIdAndUpdate(
+        {
+            _id: playlistId,
+            owner: userId
+        },
+
+        {
+            $push: {
+                videos: videoId
+            }
+        },
+
+        {
+            new: true
+        }
+    )
+
+    if(!updatedPlaylist){
+        throw new ApiError(501, "video is not added in the playlist")
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, updatedPlaylist, "video is added in this playlist"))
 })
 
 const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
