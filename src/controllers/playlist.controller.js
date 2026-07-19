@@ -114,8 +114,33 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
 
 const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
     const {playlistId, videoId} = req.params
-    // TODO: remove video from playlist
+    
+    if(!(isValidObjectId(playlistId) || isValidObjectId(videoId))){
+        throw new ApiError(400, "this id's is invalid format");
+    }
 
+    const userId = req.user._id
+
+    const updatedPlaylist = await Playlist(
+        {
+        _id: playlistId,
+        owner: userId
+        },
+        {
+            $pull: {
+                videos: videoId
+            }
+        },
+        {new: true}
+    )
+
+    if(!updatedPlaylist){
+        throw new ApiError(400, "unauthorized request")
+    }
+
+    return res
+    .status(200)
+    .json(new ApiResponse(200, updatedPlaylist, "video deleted successfull"))
 })
 
 const deletePlaylist = asyncHandler(async (req, res) => {
