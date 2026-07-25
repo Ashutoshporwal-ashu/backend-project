@@ -3,9 +3,9 @@ import { loginUser, registerUser, loggoutUser, refreshAcessToken, changeCurrentP
 import {upload} from "../middlewares/multer.middleware.js"
 import { verifyJWT } from "../middlewares/auth.middleware.js";
 
-const router = Router()
+const userRouter = Router()
 
-router.route("/register").post(
+userRouter.route("/register").post(
     upload.fields([
         {
             name: "avatar",
@@ -19,17 +19,17 @@ router.route("/register").post(
     registerUser
 )
 
-router.route("/login").post(loginUser)
+userRouter.route("/login").post(loginUser)
 
 // secure router
-router.route("/logout").post(verifyJWT ,loggoutUser)
-router.route("/refresh-token").post(refreshAcessToken)
-router.route("/change-password").post(verifyJWT, changeCurrentPassword)
-router.route("/current-user").get(verifyJWT, getCurrentUser)
-router.route("/update-details").patch(verifyJWT, updateAccountDetails)
-router.route("/avatar").patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
-router.route("/cover-image").patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
-router.route("/c/:username").get(verifyJWT, getUserChannelProfile)
-router.route("/history").get(verifyJWT, getWatchedHistory) 
+userRouter.route("/logout").post(verifyJWT ,loggoutUser)
+userRouter.route("/refresh-token").post(refreshAcessToken)
+userRouter.route("/change-password").post(verifyJWT, changeCurrentPassword)
+userRouter.route("/current-user").get(verifyJWT, getCurrentUser)
+userRouter.route("/update-details").patch(verifyJWT, updateAccountDetails)
+userRouter.route("/avatar").patch(verifyJWT, upload.single("avatar"), updateUserAvatar)
+userRouter.route("/cover-image").patch(verifyJWT, upload.single("coverImage"), updateUserCoverImage)
+userRouter.route("/c/:username").get(verifyJWT, getUserChannelProfile)
+userRouter.route("/history").get(verifyJWT, getWatchedHistory) 
 
-export default router;
+export default userRouter;

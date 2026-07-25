@@ -39,7 +39,11 @@ const getUserTweets = asyncHandler(async (req, res) => {
     // particular user ke particular tweets nikalenge db se
     // final response de denge
 
-    const userId = req.user._id
+    const userId = req.params
+
+    if(!isValidObjectId(userId)){
+        throw new ApiError(400, "user id is invalid")
+    }
 
 
     const tweet = await Tweet.find({owner: userId})
